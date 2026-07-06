@@ -37,3 +37,8 @@ https://github.com/user-attachments/assets/5192636c-4584-4276-a00e-af02b8164039
 https://github.com/user-attachments/assets/ae50e642-8b6b-4bca-b100-3487a33d28fc
 
 
+5.右键“标签页搜索”按钮，可打开最近一个关闭的标签页
+
+https://github.com/user-attachments/assets/d5784688-a836-410a-87c9-e303db9d42be
+
+
