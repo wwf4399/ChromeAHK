@@ -81,6 +81,15 @@
 				Send("{Enter}")									; 发送回车键
 				return
 			}
+		; 判断是不是左上角的标签页搜索
+			if(CheckElementsChain(ret.elementsChain, [
+				elem => elem.RoleText == '选项卡列表' && elem.StateText == '扩展的可选项',
+				elem => elem.RoleText == '菜单按钮' && elem.name == '标签页搜索' && elem.StateText == '有弹出菜单'
+			]) == true){
+				Click("Right Up")								; 右键抬起
+				Send("^+t")										; ctrl + shift + t
+				return
+			}
 	}
 }
 ; 检查鼠标当前是否悬停在指定条件的窗口上方
@@ -111,6 +120,7 @@
 				hitTestResult := SendMessage(0x84, 0, lParam, , "ahk_id " targetHWND)
 					; 0 = 无处可去。鼠标在屏幕空白处，或在不属于任何窗口的边界、隐形边缘上。
 					; 1 = 客户区（Client Area）。即网页内容的显示区域。[标签栏的标题栏部分;网址栏;收藏栏;网页本体[body]]
+					; 2 = 标题栏（可以按住拖动窗口的那个顶部区域）
 					; 20 = 关闭按钮
 			}catch{
 				return false
@@ -118,15 +128,17 @@
 			; SoundBeep(1000, 100)
 		; 获取窗口相较于屏幕的定位
 			try{
-				WinGetPos(, &winY, , , "ahk_id " targetHWND)
+				WinGetPos(&winX, &winY, , , "ahk_id " targetHWND)
 			}catch{
 				return false
 			}
 			; 这里只为了解决一个bug，在最大化时，鼠标移动到屏幕最上方，获取的垂直定位，居然是-12
 				if(winState == 1){
+					winX := 0
 					winY := 0
 				}
-			calculatedY := screenY - winY	; 暂时用不到，以前就是用鼠标的点击位置辅佐判断，现在不需要了。但还是保留着
+			calculatedX := screenX - winX
+			calculatedY := screenY - winY
 		; 获取该坐标元素及其所有父级组成的数组
 			elementsChain := GetElementFamilyChain(screenX, screenY, 5)
 		; 验证是否成功抓取
@@ -146,12 +158,14 @@
 				
 		; ===================调试用===================
 			if(clickType == 'right'){
-				;DebugElementsChain(elementsChain)
+				; DebugElementsChain(elementsChain)
 			}
 		; ============================================
 		return {
 			hitTestResult: hitTestResult,
-			elementsChain: elementsChain
+			elementsChain: elementsChain,
+			screenX: calculatedX,			; 点击的相对位置
+			screenY: calculatedY
 		}
 	}
 ; 根据提供的验证规则，验证多层的层级元素中是否全部符合
