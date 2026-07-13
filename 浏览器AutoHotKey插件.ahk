@@ -83,7 +83,6 @@
 			}
 		; 判断是不是左上角的标签页搜索
 			if(CheckElementsChain(ret.elementsChain, [
-				elem => elem.RoleText == '选项卡列表' && elem.StateText == '扩展的可选项',
 				elem => elem.RoleText == '菜单按钮' && elem.name == '标签页搜索' && elem.StateText == '有弹出菜单'
 			]) == true){
 				Click("Right Up")								; 右键抬起
