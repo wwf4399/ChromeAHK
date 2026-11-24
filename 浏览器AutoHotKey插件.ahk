@@ -40,9 +40,9 @@
 				}
 			; 在文件夹里的收藏[正常情况下模拟ctrl+shift+左键就可以了，但是这里死活无法生效]
 				if(CheckElementsChain(ret.elementsChain, [
-					elem => elem.RoleText == '菜单栏' && (elem.StateText == '已设定焦点' || elem.StateText == '有弹出菜单'),
-					elem => elem.RoleText == '弹出式菜单' && elem.StateText == '有弹出菜单',
-					elem => elem.RoleText == '菜单项目' && elem.Name != '' && elem.Description != '' && elem.StateText == '可选择'
+					elem => elem.RoleText == '菜单栏' && (elem.StateText == '已设定焦点' || elem.StateText == '有弹出菜单')
+					; elem => elem.RoleText == '弹出式菜单' && elem.StateText == '有弹出菜单',												以前的老版本是需要这两个的,新版本的浏览器压根就没有这些信息了
+					; elem => elem.RoleText == '菜单项目' && elem.Name != '' && elem.Description != '' && elem.StateText == '可选择'
 				]) == true){
 					; 这样子写，是因为了兼容左键拖拽[移动书签]场景，让用户自己触发左键弹起
 						Send("{Ctrl Down}{Shift Down}")
@@ -69,6 +69,7 @@
 			]) == true){
 				; SoundBeep(1000, 100)							; 发出提示音
 				Click("Right Up")								; 右键抬起
+				Click("Middle")									; 鼠标中键 得连续发出两次，不然是无法触发的
 				Click("Middle")									; 鼠标中键
 				return
 			}
